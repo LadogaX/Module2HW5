@@ -6,8 +6,8 @@ namespace Module2HW5.Services.Abstractions
     {
         void Append(string log);
 
-        void CloseStreamWriter();
+        void CloseWriter();
 
-        void CloseStreamWriter(StreamWriter stringWriter);
+        void CloseWriter(IWriterService writer);
     }
 }

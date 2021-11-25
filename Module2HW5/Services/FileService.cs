@@ -7,48 +7,53 @@ namespace Module2HW5.Services
 {
     public class FileService : IFileService
     {
-        private StreamWriter _streamWriter;
+        private IWriterService _writer;
         private string _logFolderPath;
-        public FileService(IConfigService config)
+        public FileService(IWriterService writer, IConfigService config)
         {
+            _writer = writer;
             Config = config;
             _logFolderPath = config.Config.LogFolderPath;
+
             if (!Directory.Exists(_logFolderPath))
             {
                 Directory.CreateDirectory(_logFolderPath);
             }
 
             ClearOldLogFiles();
-            OpenStreamWriter();
+            OpenWriter();
         }
 
         public IConfigService Config { get; set; }
 
-        public void OpenStreamWriter()
+        public void OpenWriter()
         {
-            var logFileName = Path.Combine(Config.Config.LogFolderPath, $"{DateTime.UtcNow.ToString("hh.mm.ss dd.MM.yyyy")}.txt");
-            OpenStreamWriter(logFileName);
+            OpenWriter(GetNameLogFile());
         }
 
-        public StreamWriter OpenStreamWriter(string logFileName)
+        public string GetNameLogFile()
         {
-            _streamWriter = new StreamWriter(logFileName);
-            return _streamWriter;
+            return Path.Combine(Config.Config.LogFolderPath, $"{DateTime.UtcNow.ToString("hh.mm.ss dd.MM.yyyy")}.txt");
+        }
+
+        public void OpenWriter(string logFileName)
+        {
+            _writer.StartWriter(logFileName);
         }
 
         public void Append(string log)
         {
-            _streamWriter.WriteLine(log);
+            _writer.Append(log);
         }
 
-        public void CloseStreamWriter()
+        public void CloseWriter()
         {
-            CloseStreamWriter(_streamWriter);
+            CloseWriter(_writer);
         }
 
-        public void CloseStreamWriter(StreamWriter stringWriter)
+        public void CloseWriter(IWriterService writer)
         {
-            stringWriter.Close();
+            writer.CloseWriter();
         }
 
         public void ClearOldLogFiles()

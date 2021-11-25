@@ -14,6 +14,7 @@ namespace Module2HW5
                 .AddSingleton<ILogger, Logger>()
                 .AddTransient<IFileService, FileService>()
                 .AddTransient<IConfigService, ConfigService>()
+                .AddTransient<IWriterService, WriterService>()
                 .AddTransient<Starter>()
                 .BuildServiceProvider();
 

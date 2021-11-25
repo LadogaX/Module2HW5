@@ -38,7 +38,7 @@ namespace Modul2HW5
 
         public void Close()
         {
-            _fileService.CloseStreamWriter();
+            _fileService.CloseWriter();
         }
     }
 }
